@@ -16,8 +16,13 @@
         {{task.desc}}
       </div>
       <div class="actions">
-        <button class="btn" (click)="markTask(task)">Mark</button>
-        <button class="btn" (click)="editTask(task)">Edit</button>
+        <button class="btn" (click)="markTask(task)">
+          <span *ngIf="task.done">Unmark</span>
+          <span *ngIf="!task.done">Mark</span>
+        </button>
+        <button class="btn" (click)="editTask(task)">
+          Edit
+        </button>
         <button class="btn" (click)="deleteTask(task)">Delete</button>
       </div>
     </li>
