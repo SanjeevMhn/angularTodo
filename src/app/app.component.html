@@ -4,7 +4,7 @@
 <div class="container">
   <h2>{{title}}</h2>
   <div class="taskbar">
-    <input type="text" name="add-task" id="add-task" placeholder="Enter task" [(ngModel)]="inputText"/>
+    <input type="text" name="add-task" id="add-task" placeholder="Enter task" [(ngModel)]="inputText" #inputTask/>
     <button class="add-btn" (click)="addToTask(inputText)">
       <span *ngIf="editItem">Update</span>
       <span *ngIf="!editItem">Add</span>

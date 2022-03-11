@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { fromEvent,Observable } from 'rxjs';
 import { Task } from './Task';
 
 @Component({
@@ -11,9 +12,9 @@ export class AppComponent {
   inputText!: string;
   tasks:Task[] = [
     {id:1,desc: "Buy Coffee",done: false},
-    {id:2,desc: "Go Outside",done: false},
+    {id:2,desc: "Go Outside",done: true},
     {id:3,desc: "Paint Kitchen",done: false},
-    {id:4,desc: "Buy Groceries",done: false},
+    {id:4,desc: "Buy Groceries",done: true},
     {id:5,desc: "Walk the dog",done: false}
   ];
   completedTasks:Task[]=[];
@@ -21,8 +22,22 @@ export class AppComponent {
   editItemId!:number;
   markedItems:Task[]=[];
   markedItem!:Task;
+  enterKey!:Observable<any>;
 
- 
+  ngOnInit(){
+    this.tasks.map((task:Task)=>{
+      if(task.done){
+        this.addToCompletedList(task);
+      }
+    })
+  }
+
+  ngDoCheck(){
+    
+  }
+
+
+
   addToTask(inp:string):void{
     //check if the item is not being updated
     if(!this.editItem){
@@ -56,17 +71,31 @@ export class AppComponent {
 
   }
 
+  addToCompletedList(inp:Task){
+    let dup = this.completedTasks.filter((ct:Task)=>{
+      return ct.id === inp.id;
+    })
+    if(dup.length === 0){
+      this.completedTasks.unshift(inp);
+    }else{
+      this.completedTasks.filter((ct:Task)=>{
+        return ct.id !== inp.id;
+      })
+    }
+  }
+
   markTask(inp:Task):void{
     this.tasks.map((task:Task,index:number)=>{
       if(task.id === inp.id){
         task.done = !task.done;
+        this.addToCompletedList(task);
       }
     });
   }
 
   deleteTask(inp:Task):void{
     let index = this.tasks.indexOf(inp);
-    this.tasks.splice(index,1); 
+    this.tasks.splice(index,1);
   }
 
   editTask(inp:Task):void{
